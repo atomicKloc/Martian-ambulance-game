@@ -15,8 +15,7 @@ public class wheelsleft : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        Debug.Log(Input.GetAxis("Vertical"));
+    {   
         motor.targetVelocity = 1000f * Input.GetAxis("Vertical");
         if (Input.GetAxis("Horizontal") > 0f){
             motor.targetVelocity -= 1000f;
