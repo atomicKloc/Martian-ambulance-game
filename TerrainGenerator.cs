@@ -5,6 +5,8 @@ using UnityEngine;
 public class TerrainGenerator : MonoBehaviour
 {
     public GameObject rover;
+    public GameObject marsBase;
+    public const float E = 2.71828175F;
     Vector3[] vertices;
     Vector2[] newUV;
     int[] triangles;
@@ -13,11 +15,16 @@ public class TerrainGenerator : MonoBehaviour
     public Vector3 roverPos;
     public Vector3 offset;
     public Mesh mesh;
+    AudioSource audioData;
+    
     
     void Start()
     {
+        audioData = GetComponent<AudioSource>();
+        audioData.Play(0);
         mesh = new Mesh();
         rover = GameObject.FindWithTag("rover");
+        marsBase = GameObject.FindWithTag("base");
         roverPos = new Vector3 (Mathf.Round(rover.transform.position.x),0,Mathf.Round(rover.transform.position.z));
         offset = roverPos;
         CreateShape();
@@ -26,6 +33,7 @@ public class TerrainGenerator : MonoBehaviour
         mesh.uv = newUV;
         mesh.triangles = triangles;
         GetComponent<MeshCollider>().sharedMesh = mesh;
+        mesh.RecalculateNormals();
     }
     // Start is called before the first frame update
 
@@ -34,7 +42,7 @@ public class TerrainGenerator : MonoBehaviour
         vertices = new Vector3[(xSize+1)*(zSize+1)];
         for (int i = 0, z = (int)offset.z; z <= zSize+offset.z; z++){
             for (int x = (int)offset.x; x <= xSize+offset.x; x++){
-                float y = (Mathf.PerlinNoise(x*.1f,z*.05f)-.5f) *10f+(Mathf.PerlinNoise(x*.01f,z*.01f)-.5f) *50f;
+                float y = 1f/(1f+Mathf.Pow(E,(-.5f*(Vector3.Distance(new Vector3(0,0,0), new Vector3(x-50,0,z-50))-80f))))*1f/(1f+Mathf.Pow(E,(-.5f*(Vector3.Distance(marsBase.transform.position, new Vector3(x-50,0,z-50))-80f))))*((Mathf.PerlinNoise(x*.1f,z*.05f)-.5f) *10f+(Mathf.PerlinNoise(x*.01f,z*.01f)-.5f) *50f);
                 vertices[i] = new Vector3(x,y,z);
                 i++;
             }
@@ -68,6 +76,7 @@ public class TerrainGenerator : MonoBehaviour
             mesh.triangles = triangles;
             GetComponent<MeshCollider>().sharedMesh = mesh;
             mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
         }
         
     }
