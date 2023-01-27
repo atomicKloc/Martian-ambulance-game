@@ -15,15 +15,18 @@ public class navArrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //defining components
         rover = GameObject.FindWithTag("rover");
         marsBase = GameObject.FindWithTag("base");
         UpdatePos();
         
     }
     void UpdatePos(){
+        //updating variables
         roverPos = rover.transform.position;
         basePos = marsBase.transform.position;
         roverForward = rover.transform.up;
+        //compensating for arctan discreptencies
         if(roverPos.z-basePos.z<0){
             adjust1 = Mathf.PI;
         }else{
@@ -39,10 +42,11 @@ public class navArrow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         UpdatePos();
+        //calculating rotation for arrow based on rover and base position
         direction = (Mathf.Atan((roverPos.x-basePos.x)/(roverPos.z-basePos.z))+adjust1-Mathf.Atan(roverForward.x/roverForward.z)-adjust2)*180f/Mathf.PI;
         transform.rotation = Quaternion.Euler(0f, 0f, direction);
-        Debug.Log(roverForward);
         
     }
 }

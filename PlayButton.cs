@@ -10,16 +10,21 @@ public class PlayButton : MonoBehaviour
         audioData = GetComponent<AudioSource>();
         audioData.Play(0);
     }
-    // Start is called before the first frame update
+    // disables cursor, loads new scene
     public void Play(){
         Cursor.visible = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        SceneManager.LoadScene(1);
     }
+    //Exit's game
     public void Exit(){
         Application.Quit();
     }
+    //activates cursor, goes back to game
     public void Back(){
         Cursor.visible = true;
         SceneManager.LoadScene(0);
+    }
+    public void Update(){
+        audioData.volume = PlayerPrefs.GetFloat("volume");
     }
 }

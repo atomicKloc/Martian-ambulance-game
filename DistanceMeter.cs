@@ -14,6 +14,7 @@ public class DistanceMeter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //define components
         rover = GameObject.FindWithTag("rover");
         marsBase = GameObject.FindWithTag("base");
         mText = GetComponent<TMPro.TextMeshProUGUI>();
@@ -22,6 +23,7 @@ public class DistanceMeter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //update ui text to show distance from rover to base
         distance = Vector3.Distance(rover.transform.position,marsBase.transform.position);
         if(distance>1000){
             mText.text = "Distance: " + (distance/1000f).ToString("0.0000")+"km";

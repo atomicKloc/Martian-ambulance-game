@@ -15,18 +15,17 @@ public class TerrainGenerator : MonoBehaviour
     public Vector3 roverPos;
     public Vector3 offset;
     public Mesh mesh;
-    AudioSource audioData;
     
     
     void Start()
     {
-        audioData = GetComponent<AudioSource>();
-        audioData.Play(0);
+        //defining variables
         mesh = new Mesh();
         rover = GameObject.FindWithTag("rover");
         marsBase = GameObject.FindWithTag("base");
         roverPos = new Vector3 (Mathf.Round(rover.transform.position.x),0,Mathf.Round(rover.transform.position.z));
         offset = roverPos;
+        //creating shape
         CreateShape();
         GetComponent<MeshFilter>().mesh = mesh;
         mesh.vertices = vertices;
@@ -38,17 +37,18 @@ public class TerrainGenerator : MonoBehaviour
     // Start is called before the first frame update
 
     void CreateShape(){
-        Debug.Log("CreateShape!");
+        //specifying vertex positions
         vertices = new Vector3[(xSize+1)*(zSize+1)];
         for (int i = 0, z = (int)offset.z; z <= zSize+offset.z; z++){
             for (int x = (int)offset.x; x <= xSize+offset.x; x++){
-                float y = 1f/(1f+Mathf.Pow(E,(-.5f*(Vector3.Distance(new Vector3(0,0,0), new Vector3(x-50,0,z-50))-80f))))*1f/(1f+Mathf.Pow(E,(-.5f*(Vector3.Distance(marsBase.transform.position, new Vector3(x-50,0,z-50))-80f))))*((Mathf.PerlinNoise(x*.1f,z*.05f)-.5f) *10f+(Mathf.PerlinNoise(x*.01f,z*.01f)-.5f) *50f);
+                //deciting height based on perlin noise, making terain flat near points of inerest
+                float y = 1f/(1f+Mathf.Pow(E,(-.5f*(Vector3.Distance(new Vector3(0,0,0), new Vector3(x-50,0,z-50))-80f))))*1f/(1f+Mathf.Pow(E,(-.5f*(Vector3.Distance(marsBase.transform.position, new Vector3(x-50,0,z-50))-80f))))*((Mathf.PerlinNoise(x*.1f-2000f,z*.05f-2000f)-.5f) *10f+(Mathf.PerlinNoise(x*.01f+2000f,z*.01f+2000f)-.5f) *50f);
                 vertices[i] = new Vector3(x,y,z);
                 i++;
             }
         }
+        //creates triangles
         triangles = new int[xSize*zSize*6];
-
         int vert = 0;
         int tris = 0;
         for (int z = (int)offset.z; z < zSize +  offset.z; z++){
@@ -67,6 +67,7 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
     void Update(){
+        //reloads mesh in new position as player moves
         roverPos = new Vector3 (Mathf.Round(rover.transform.position.x),0,Mathf.Round(rover.transform.position.z));
         if(Vector3.Distance(roverPos,offset)>10){
             offset = roverPos;

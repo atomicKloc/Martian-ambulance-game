@@ -16,6 +16,7 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if the escape key is pressed the menu is pulled up
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Time.timeScale = 0;
@@ -23,6 +24,7 @@ public class PauseMenu : MonoBehaviour
             menu.SetActive(true);
         }
     }
+    //returns back to the game
     public void Continue(){
         Time.timeScale = 1;
         Cursor.visible = false;

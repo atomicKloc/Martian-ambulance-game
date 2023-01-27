@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class DeathBar : MonoBehaviour
 {
+    
     public float death = 0f;
     public Slider slider;
     // Start is called before the first frame update
@@ -19,6 +20,7 @@ public class DeathBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //slowly counts until death, if it reaches it, it will to to the death screen
         death += 1f/600f*Time.deltaTime;
         slider.value = death;
         if(death >= 1f){
