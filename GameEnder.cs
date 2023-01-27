@@ -33,8 +33,10 @@ public class GameEnder : MonoBehaviour
             time+=Time.deltaTime;
             if(time > 3){
                 Cursor.visible = true;
-                if(PlayerPrefs.GetFloat("highScore")>600f-journeyTime){
+                if(PlayerPrefs.GetFloat("highScore")<600f-journeyTime){
+                    Debug.Log("oh");
                     PlayerPrefs.SetFloat("highScore",600f-journeyTime);
+                    Debug.Log(PlayerPrefs.GetFloat("highScore"));
                 }
                 Debug.Log(PlayerPrefs.GetFloat("highScore"));
                 //PlayerPrefs.SetFloat("highScore",0f);
